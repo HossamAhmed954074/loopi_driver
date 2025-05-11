@@ -8,14 +8,12 @@ import 'package:loopi_driver/views/phone_screen/screens/otp_screen.dart';
 import 'package:loopi_driver/views/phone_screen/screens/phone_screen.dart';
 import 'package:loopi_driver/views/splash_screen/screens/splash_screen.dart';
 
-
-void main() async{
-   WidgetsFlutterBinding.ensureInitialized();
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
- 
+
   runApp(const LoopiDriver());
 }
-
 
 class LoopiDriver extends StatelessWidget {
   const LoopiDriver({super.key});
@@ -25,11 +23,11 @@ class LoopiDriver extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       routes: {
-        splashScreen : (context) => SplashScreen(),
-        homeScreen : (context) => HomeScreen(),
-        getStartedScreen : (context) => GetStartedScreen(),
-        phoneScreen:(context) => PhoneScreen(),
-        otpScreen : (context) => OtpScreen(),
+        splashScreen: (context) => SplashScreen(),
+        homeScreen: (context) => HomeScreen(),
+        getStartedScreen: (context) => GetStartedScreen(),
+        phoneScreen: (context) => PhoneScreen(),
+        otpScreen: (context) => OtpScreen(),
       },
       initialRoute: splashScreen,
     );
