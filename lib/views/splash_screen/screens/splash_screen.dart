@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:loopi_driver/constants/colors_constants.dart';
 import 'package:loopi_driver/constants/routs_constants.dart';
-import 'package:loopi_driver/main.dart';
 import 'package:loopi_driver/views/splash_screen/widgets/slide_text_animation.dart';
 
 
@@ -35,7 +34,7 @@ class _SplashScreenState extends State<SplashScreen>
       }else if(user.phoneNumber != null){
         authUser = user.phoneNumber!;
       }
-       Navigator.pushReplacementNamed(context, homeScreen);
+       Navigator.pushReplacementNamed(context, bootomNavigation);
     }
   });
     },);

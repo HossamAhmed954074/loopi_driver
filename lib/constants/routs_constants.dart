@@ -1,5 +1,6 @@
 const String splashScreen = '/';
 const String getStartedScreen = 'GetStartedScreen';
+const String bootomNavigation = 'BottomNavigationBarCustomWidget';
 const String logInScreen = 'LogInScreen';
 const String registerScreen = 'RegisterScreen';
 const String phoneScreen = 'PhoneScreen';

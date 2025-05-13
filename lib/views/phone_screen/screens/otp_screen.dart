@@ -25,7 +25,7 @@ class OtpScreen extends StatelessWidget {
         }if(state is PhoneOtpVerified){
           Navigator.pop(context);
           snackBarCustom(context, 'تم ألتأكيد');
-          Navigator.pushReplacementNamed(context, homeScreen);
+          Navigator.pushReplacementNamed(context, bootomNavigation);
         }
       },
       builder: (context, state) {
