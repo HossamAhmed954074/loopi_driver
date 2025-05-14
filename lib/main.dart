@@ -8,6 +8,7 @@ import 'package:loopi_driver/firebase_options.dart';
 import 'package:loopi_driver/views/get_started_screen/screens/get_started_screen.dart';
 import 'package:loopi_driver/views/home_screen/screens/bottom_navigation.dart';
 import 'package:loopi_driver/views/home_screen/screens/home_screen.dart';
+import 'package:loopi_driver/views/message_screen/screens/message_screen.dart';
 import 'package:loopi_driver/views/phone_screen/screens/otp_screen.dart';
 import 'package:loopi_driver/views/phone_screen/screens/phone_screen.dart';
 import 'package:loopi_driver/views/splash_screen/screens/splash_screen.dart';
@@ -43,6 +44,7 @@ class LoopiDriver extends StatelessWidget {
               phoneScreen: (context) => PhoneScreen(),
               otpScreen: (context) => OtpScreen(),
               bootomNavigation: (context) => BottomNavigationBarCustomWidget(),
+              messageScreen : (context) => MessageScreen(),
             },
             initialRoute: splashScreen,
           );
