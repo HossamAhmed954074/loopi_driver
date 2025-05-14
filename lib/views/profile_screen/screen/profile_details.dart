@@ -2,7 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loopi_driver/cubits/home_cubit/cubit/home_cubit.dart';
-import 'package:loopi_driver/cubits/phone_cubit/phone_auth_cubit.dart';
+
+import '../../../cubits/login_cubit/cubit/log_in_cubit.dart';
 
 class PersonalInfoPage extends StatelessWidget {
   const PersonalInfoPage({super.key});
@@ -11,9 +12,9 @@ class PersonalInfoPage extends StatelessWidget {
   Widget build(BuildContext context) {
     BlocProvider.of<HomeCubit>(context).getDate(
       auth:
-          BlocProvider.of<PhoneAuthCubit>(
+          BlocProvider.of<LogInCubit>(
             context,
-          ).getLoggedInUser().phoneNumber!,
+          ).getLoggedInUser().email!,
     );
     final screenWidth = MediaQuery.of(context).size.width;
     return BlocConsumer<HomeCubit, HomeState>(

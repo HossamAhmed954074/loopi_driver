@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loopi_driver/constants/colors_constants.dart';
 import 'package:loopi_driver/cubits/home_cubit/cubit/home_cubit.dart';
-import 'package:loopi_driver/cubits/phone_cubit/phone_auth_cubit.dart';
+import 'package:loopi_driver/cubits/login_cubit/cubit/log_in_cubit.dart';
 import 'package:loopi_driver/models/driver_model.dart';
 import 'package:loopi_driver/models/ticket_model.dart';
 import 'package:loopi_driver/views/profile_screen/widgets/divider_custom_widget.dart';
@@ -15,17 +15,17 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     BlocProvider.of<HomeCubit>(context).getDate(
       auth:
-          BlocProvider.of<PhoneAuthCubit>(
+          BlocProvider.of<LogInCubit>(
             context,
-          ).getLoggedInUser().phoneNumber!,
+          ).getLoggedInUser().email!,
     );
 
     List<TicketModel> ticketList =[];
      BlocProvider.of<HomeCubit>(context).getTicketsDate(
       auth:
-          BlocProvider.of<PhoneAuthCubit>(
+          BlocProvider.of<LogInCubit>(
             context,
-          ).getLoggedInUser().phoneNumber!,
+          ).getLoggedInUser().email!,
     );
     return BlocConsumer<HomeCubit, HomeState>(
       listener: (context, state) {
@@ -139,7 +139,7 @@ class AppBarCustomWidget extends StatelessWidget {
               ),
             ),
             title: Text(
-              '${BlocProvider.of<PhoneAuthCubit>(context).getLoggedInUser().phoneNumber}',
+              '${BlocProvider.of<LogInCubit>(context).getLoggedInUser().email}',
               style: TextStyle(color: Colors.white, fontSize: 22),
             ),
             subtitle: Text(

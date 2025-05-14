@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loopi_driver/constants/colors_constants.dart';
 import 'package:loopi_driver/cubits/chat_cubit/cubit/chat_cubit.dart';
-import 'package:loopi_driver/cubits/phone_cubit/phone_auth_cubit.dart';
 import 'package:loopi_driver/models/message_model.dart';
 import 'package:loopi_driver/views/message_screen/widgets/bubble_chat_get.dart';
 import 'package:loopi_driver/views/message_screen/widgets/bubble_chat_post.dart';
+
+import '../../../cubits/login_cubit/cubit/log_in_cubit.dart';
 
 class MessageScreen extends StatelessWidget {
  const  MessageScreen({super.key});
@@ -18,13 +19,13 @@ class MessageScreen extends StatelessWidget {
     final _controller = ScrollController();
     List<MessageModel> messageList =[];
     var auth =
-        BlocProvider.of<PhoneAuthCubit>(context).getLoggedInUser().phoneNumber;
+        BlocProvider.of<LogInCubit>(context).getLoggedInUser().email;
 
     BlocProvider.of<ChatCubit>(context).getDate(
       auth:
-          BlocProvider.of<PhoneAuthCubit>(
+          BlocProvider.of<LogInCubit>(
             context,
-          ).getLoggedInUser().phoneNumber!,
+          ).getLoggedInUser().email!,
     );
     return Scaffold(
       appBar: AppBar(
@@ -70,9 +71,9 @@ class MessageScreen extends StatelessWidget {
       bottomSheet: SendMasseageTextFaildCustomWidget(
         controller: controller,
         auth:
-            BlocProvider.of<PhoneAuthCubit>(
+            BlocProvider.of<LogInCubit>(
               context,
-            ).getLoggedInUser().phoneNumber,
+            ).getLoggedInUser().email,
         scrollController: _controller,
       ),
     );

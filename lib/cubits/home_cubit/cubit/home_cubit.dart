@@ -13,8 +13,6 @@ class HomeCubit extends Cubit<HomeState> {
      DocumentSnapshot data = await FirebaseFirestore.instance
       .collection('drivers')
       .doc(auth).get();
-
-   //  log(data['from']);
      emit(HomeSuccess(driverModel: DriverModel.fromJson(data)));
      
   }

@@ -4,8 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loopi_driver/constants/routs_constants.dart';
 import 'package:loopi_driver/cubits/app_theme_cubit/cubit/app_theme_cubit.dart';
 import 'package:loopi_driver/cubits/home_cubit/cubit/home_cubit.dart';
-import 'package:loopi_driver/cubits/phone_cubit/phone_auth_cubit.dart';
+import 'package:loopi_driver/cubits/login_cubit/cubit/log_in_cubit.dart';
 import 'package:loopi_driver/models/driver_model.dart';
+import 'package:loopi_driver/views/get_started_screen/screens/get_started_screen.dart';
 import 'package:loopi_driver/views/home_screen/screens/home_screen.dart';
 import 'package:loopi_driver/views/profile_screen/widgets/divider_custom_widget.dart';
 import 'package:loopi_driver/views/profile_screen/widgets/list_item_custom_button.dart';
@@ -105,10 +106,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     title: 'تسجيل الخروج',
                     trailing: Icon(Icons.arrow_back_ios_new),
 
-                    onTap: () {
-                      BlocProvider.of<PhoneAuthCubit>(context).logOut();
-                      // ignore: use_build_context_synchronously
-                      Navigator.pushReplacementNamed(context, getStartedScreen);
+                    onTap: () async {
+                     await BlocProvider.of<LogInCubit>(context).logOut();
+                   
+                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => GetStartedScreen(),));
                     },
                   ),
                 ],

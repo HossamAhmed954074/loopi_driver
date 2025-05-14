@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class ButtonCustom extends StatelessWidget {
-  const ButtonCustom({
+class LogInButtonCustom extends StatelessWidget {
+  const LogInButtonCustom({
     required this.buttonTitle,
     required this.buttonColor,
     required this.textColor,

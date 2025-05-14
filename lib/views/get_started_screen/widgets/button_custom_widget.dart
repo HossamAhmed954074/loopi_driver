@@ -10,7 +10,7 @@ class ButtonCustomWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () {
-        Navigator.pushReplacementNamed(context, phoneScreen);
+        Navigator.pushReplacementNamed(context, logInScreen);
       },
       child: Text('Login'),
     );

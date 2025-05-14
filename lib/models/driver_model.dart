@@ -20,13 +20,13 @@ class DriverModel {
   factory DriverModel.fromJson(json) {
     return DriverModel(
       
-      driverName: json['driverName'],
-      phoneNumber: json['phoneNumber'],
-      licenseNumber: json['licenseNumber'],
-      driverImage: 'https://drive.google.com/uc?export=view&id=${json['deiverImage']}',
-      fromWhere: json['from'],
-      toWhere: json['to'],
-       address: json['address'],
+      driverName: json['driverName'] ?? 'unKnown',
+      phoneNumber: json['phoneNumber'] ?? '00000',
+      licenseNumber: json['licenseNumber'] ?? '00000',
+      driverImage: 'https://drive.google.com/uc?export=view&id=${json['driverImage'] ?? ''}' ,
+      fromWhere: json['from']?? '',
+      toWhere: json['to'] ?? '',
+       address: json['address'] ?? '',
     );
   }
 }

@@ -27,14 +27,20 @@ class _SplashScreenState extends State<SplashScreen>
     Future.delayed(const Duration(seconds: 2),() {
        FirebaseAuth.instance.authStateChanges().listen((user) {
     if (user == null) {
-      Navigator.pushReplacementNamed(context, getStartedScreen);
+
+      if(mounted){
+        Navigator.pushReplacementNamed(context, getStartedScreen);
+      }
+
     } else {
       if(user.email != null){
         authUser = user.email!;
       }else if(user.phoneNumber != null){
         authUser = user.phoneNumber!;
       }
-       Navigator.pushReplacementNamed(context, bootomNavigation);
+      if(mounted) {
+        Navigator.pushReplacementNamed(context, bootomNavigation);
+      }
     }
   });
     },);
