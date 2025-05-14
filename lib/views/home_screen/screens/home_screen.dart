@@ -1,7 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loopi_driver/constants/colors_constants.dart';
+import 'package:loopi_driver/cubits/home_cubit/cubit/home_cubit.dart';
 import 'package:loopi_driver/cubits/phone_cubit/phone_auth_cubit.dart';
+import 'package:loopi_driver/models/driver_model.dart';
+import 'package:loopi_driver/models/ticket_model.dart';
 import 'package:loopi_driver/views/profile_screen/widgets/divider_custom_widget.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -9,34 +13,62 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            AppBarCustomWidget(),
-            SizedBox(height: 20),
-            SubComponentCustomWidget(),
-            SizedBox(height: 10),
+    BlocProvider.of<HomeCubit>(context).getDate(
+      auth:
+          BlocProvider.of<PhoneAuthCubit>(
+            context,
+          ).getLoggedInUser().phoneNumber!,
+    );
 
-
-
-            Expanded(
-              child: ListView.builder(
-                itemCount: 5,
-                itemBuilder: (context, index) =>   TripCard(
-                startTime: '07:30 AM',
-                endTime: '09:00 AM',
-                startLocation: 'العاشر من رمضان',
-                endLocation: 'العبور الجامعة',
-                price: '50 EGP' ,
-                seats: 1,
-              ),),
+    List<TicketModel> ticketList =[];
+     BlocProvider.of<HomeCubit>(context).getTicketsDate(
+      auth:
+          BlocProvider.of<PhoneAuthCubit>(
+            context,
+          ).getLoggedInUser().phoneNumber!,
+    );
+    return BlocConsumer<HomeCubit, HomeState>(
+      listener: (context, state) {
+           if(state is TicketSuccess){
+            ticketList = state.ticketModel;
+           }
+      },
+      builder: (context, state) {
+        return SafeArea(
+          child: Scaffold(
+            body: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                AppBarCustomWidget(
+                  driverModell:
+                      state is HomeSuccess
+                          ? state.driverModel
+                          : DriverModel(
+                            driverName: '',
+                            phoneNumber: '',
+                            licenseNumber: '',
+                            driverImage: '',
+                            fromWhere: '',
+                            toWhere: '',
+                          ),
+                ),
+                SizedBox(height: 20),
+                SubComponentCustomWidget(),
+                SizedBox(height: 10),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: ticketList.length,
+                    itemBuilder:
+                        (context, index) => TripCard(
+                         ticketModel: ticketList[index],
+                        ),
+                  ),
+                ),
+              ],
             ),
-           
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }
@@ -70,8 +102,8 @@ class SubComponentCustomWidget extends StatelessWidget {
 }
 
 class AppBarCustomWidget extends StatelessWidget {
-  const AppBarCustomWidget({super.key});
-
+  const AppBarCustomWidget({super.key, required this.driverModell});
+  final DriverModel driverModell;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -87,13 +119,31 @@ class AppBarCustomWidget extends StatelessWidget {
       child: Column(
         children: [
           ListTile(
-            leading: Image.asset('assets/images/icon.png'),
+            leading: CircleAvatar(
+              radius: 30,
+              child: ClipOval(
+                child: CachedNetworkImage(
+                  imageUrl: driverModell.driverImage,
+                  imageBuilder:
+                      (context, imageProvider) => Container(
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: imageProvider,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                  placeholder: (context, url) => CircularProgressIndicator(),
+                  errorWidget: (context, url, error) => Icon(Icons.error),
+                ),
+              ),
+            ),
             title: Text(
               '${BlocProvider.of<PhoneAuthCubit>(context).getLoggedInUser().phoneNumber}',
               style: TextStyle(color: Colors.white, fontSize: 22),
             ),
             subtitle: Text(
-              'Driver Client',
+              driverModell.driverName,
               style: TextStyle(color: Colors.white),
             ),
             trailing: Icon(
@@ -103,7 +153,7 @@ class AppBarCustomWidget extends StatelessWidget {
           ),
           ListTile(
             leading: Text(
-              'From : العاشر من رمضان',
+              'From : ${driverModell.fromWhere}',
               style: TextStyle(color: Colors.white, fontSize: 14),
             ),
             title: Text(
@@ -111,7 +161,7 @@ class AppBarCustomWidget extends StatelessWidget {
               style: TextStyle(color: Colors.white, fontSize: 16),
             ),
             trailing: Text(
-              'To : العبور الجامعة',
+              'To : ${driverModell.toWhere} ',
               style: TextStyle(color: Colors.white, fontSize: 14),
             ),
           ),
@@ -122,21 +172,11 @@ class AppBarCustomWidget extends StatelessWidget {
 }
 
 class TripCard extends StatelessWidget {
-  final String startTime;
-  final String endTime;
-  final String startLocation;
-  final String endLocation;
-  final String price;
-  final int seats;
 
+final TicketModel ticketModel;
   const TripCard({
-    super.key,
-    required this.startTime,
-    required this.endTime,
-    required this.startLocation,
-    required this.endLocation,
-    required this.price,
-    required this.seats,
+    super.key, required this.ticketModel,
+ 
   });
 
   @override
@@ -151,28 +191,26 @@ class TripCard extends StatelessWidget {
       child: Row(
         children: [
           /// Time Column
-          Expanded(
-            flex: 1,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildTimeText(startTime),
-                const SizedBox(height: 12),
-                _buildTimeText(endTime),
-              ],
-            ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildTimeText(ticketModel.fromTime),
+              const SizedBox(height: 12),
+              _buildTimeText(ticketModel.toTime),
+            ],
           ),
+          const SizedBox(width: 10),
           Container(width: 2, height: 50, color: Colors.blueAccent),
-          const SizedBox(width: 15),
+          const SizedBox(width: 10),
           Expanded(
             flex: 1,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildLocationText(startLocation),
+                _buildLocationText(ticketModel.fromWhere),
                 const Text('Bus Station', style: TextStyle(color: Colors.grey)),
                 const SizedBox(height: 12),
-                _buildLocationText(endLocation),
+                _buildLocationText(ticketModel.toWhere),
                 const Text('Bus Station', style: TextStyle(color: Colors.grey)),
               ],
             ),
@@ -184,22 +222,21 @@ class TripCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-               
                 /// Bottom Row: Details, Price, Seats
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Text(
-                      price,
+                     '${ ticketModel.allPrice} EGP',
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 16,
+                        fontSize: 12,
                       ),
                     ),
                     const SizedBox(width: 8),
                     Row(
                       children: [
-                        Text('$seats', style: const TextStyle(fontSize: 12)),
+                        Text(ticketModel.personCount.toString(), style: const TextStyle(fontSize: 12)),
                         const SizedBox(width: 2),
                         const Icon(Icons.person, size: 16),
                       ],
@@ -217,7 +254,7 @@ class TripCard extends StatelessWidget {
   Widget _buildTimeText(String time) {
     return Text(
       time,
-      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+      style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
     );
   }
 

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loopi_driver/constants/routs_constants.dart';
 import 'package:loopi_driver/cubits/app_theme_cubit/cubit/app_theme_cubit.dart';
+import 'package:loopi_driver/cubits/chat_cubit/cubit/chat_cubit.dart';
+import 'package:loopi_driver/cubits/home_cubit/cubit/home_cubit.dart';
 import 'package:loopi_driver/cubits/phone_cubit/phone_auth_cubit.dart';
 import 'package:loopi_driver/firebase_options.dart';
 import 'package:loopi_driver/views/get_started_screen/screens/get_started_screen.dart';
@@ -29,6 +31,8 @@ class LoopiDriver extends StatelessWidget {
       providers: [
         BlocProvider(create: (context) => PhoneAuthCubit()),
         BlocProvider(create: (context) => AppThemeCubit(),),
+        BlocProvider(create: (context) => ChatCubit(),),
+        BlocProvider(create: (context) => HomeCubit(),),
         ],
       child: BlocBuilder<AppThemeCubit, AppThemeState>(
         builder: (context, state) {

@@ -1,22 +1,82 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:loopi_driver/api/fire_base_api.dart';
 import 'package:loopi_driver/constants/colors_constants.dart';
+import 'package:loopi_driver/cubits/chat_cubit/cubit/chat_cubit.dart';
+import 'package:loopi_driver/cubits/phone_cubit/phone_auth_cubit.dart';
+import 'package:loopi_driver/models/message_model.dart';
+import 'package:loopi_driver/views/message_screen/widgets/bubble_chat_get.dart';
+import 'package:loopi_driver/views/message_screen/widgets/bubble_chat_post.dart';
+import 'package:loopi_driver/views/phone_screen/widgets/progress_indecator.dart';
 
 class MessageScreen extends StatelessWidget {
-  const MessageScreen({super.key});
+   MessageScreen({super.key});
 
+
+ List<MessageModel> messageList =[];
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    final TextEditingController controller = TextEditingController();
+    final _controller = ScrollController();
 
+    var auth =
+        BlocProvider.of<PhoneAuthCubit>(context).getLoggedInUser().phoneNumber;
+
+    BlocProvider.of<ChatCubit>(context).getDate(
+      auth:
+          BlocProvider.of<PhoneAuthCubit>(
+            context,
+          ).getLoggedInUser().phoneNumber!,
+    );
+    return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         elevation: 2,
-        title: Text('Chat With Admin',style: TextStyle(fontWeight: FontWeight.bold),),
+        title: Text(
+          'Chat With Admin',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
       ),
-      body: Center(
-        child: Text('message Screen'),
+      body: Column(
+        children: [
+          Expanded(
+            child: BlocConsumer<ChatCubit, ChatState>(
+              listener: (context, state) {
+                if(state is ChatSuccess){
+                 messageList =state.messageList;
+                }
+              },
+              builder: (context, state) {
+                if (state is ChatSuccess) {
+                 return ListView.builder(
+                    reverse: true,
+                    controller: _controller,
+                    physics: BouncingScrollPhysics(),
+                    itemCount: messageList.length,
+                    itemBuilder:
+                        (context, index) =>
+                            auth == messageList[index].id
+                                ? BubbleChatGet(masseage: messageList[index].message)
+                                : BubbleChatPost(
+                                  masseage: messageList[index].message,
+                                ),
+                  );
+                }
+                return Center(child: Text('Not have message'));
+              },
+            ),
+          ),
+          SizedBox(height: 100,)
+        ],
       ),
-      bottomSheet: SendMasseageTextFaildCustomWidget(controller: TextEditingController(),email: 'gd',scrollController: ScrollController(),),
+      bottomSheet: SendMasseageTextFaildCustomWidget(
+        controller: controller,
+        auth:
+            BlocProvider.of<PhoneAuthCubit>(
+              context,
+            ).getLoggedInUser().phoneNumber,
+        scrollController: _controller,
+      ),
     );
   }
 }
@@ -27,13 +87,13 @@ class SendMasseageTextFaildCustomWidget extends StatelessWidget {
     super.key,
     required this.controller,
     required this.scrollController,
-    required this.email,
+    required this.auth,
   });
   final ScrollController scrollController;
   final TextEditingController controller;
   // final CollectionReference<Object?> messages;
   // ignore: prefer_typing_uninitialized_variables
-  var email;
+  var auth;
   String? message;
   @override
   Widget build(BuildContext context) {
@@ -49,9 +109,9 @@ class SendMasseageTextFaildCustomWidget extends StatelessWidget {
           suffixIcon: IconButton(
             onPressed: () {
               if (message != null) {
-                // BlocProvider.of<ChatCubit>(
-                //   context,
-                // ).sendMessage(message: message!, email: email);
+                BlocProvider.of<ChatCubit>(
+                  context,
+                ).postMessageData(message: message!, auth: auth);
                 //todo add masseage
                 controller.clear();
                 scrollController.animateTo(
