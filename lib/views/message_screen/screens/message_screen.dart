@@ -1,24 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:loopi_driver/api/fire_base_api.dart';
 import 'package:loopi_driver/constants/colors_constants.dart';
 import 'package:loopi_driver/cubits/chat_cubit/cubit/chat_cubit.dart';
 import 'package:loopi_driver/cubits/phone_cubit/phone_auth_cubit.dart';
 import 'package:loopi_driver/models/message_model.dart';
 import 'package:loopi_driver/views/message_screen/widgets/bubble_chat_get.dart';
 import 'package:loopi_driver/views/message_screen/widgets/bubble_chat_post.dart';
-import 'package:loopi_driver/views/phone_screen/widgets/progress_indecator.dart';
 
 class MessageScreen extends StatelessWidget {
-   MessageScreen({super.key});
+ const  MessageScreen({super.key});
 
 
- List<MessageModel> messageList =[];
+ 
   @override
   Widget build(BuildContext context) {
     final TextEditingController controller = TextEditingController();
     final _controller = ScrollController();
-
+    List<MessageModel> messageList =[];
     var auth =
         BlocProvider.of<PhoneAuthCubit>(context).getLoggedInUser().phoneNumber;
 

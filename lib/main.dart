@@ -13,6 +13,7 @@ import 'package:loopi_driver/views/home_screen/screens/home_screen.dart';
 import 'package:loopi_driver/views/message_screen/screens/message_screen.dart';
 import 'package:loopi_driver/views/phone_screen/screens/otp_screen.dart';
 import 'package:loopi_driver/views/phone_screen/screens/phone_screen.dart';
+import 'package:loopi_driver/views/profile_screen/screen/profile_details.dart';
 import 'package:loopi_driver/views/splash_screen/screens/splash_screen.dart';
 
 void main() async {
@@ -49,6 +50,7 @@ class LoopiDriver extends StatelessWidget {
               otpScreen: (context) => OtpScreen(),
               bootomNavigation: (context) => BottomNavigationBarCustomWidget(),
               messageScreen : (context) => MessageScreen(),
+              personalInfoPage : (context) => PersonalInfoPage(),
             },
             initialRoute: splashScreen,
           );

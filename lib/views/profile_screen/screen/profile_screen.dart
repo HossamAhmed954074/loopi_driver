@@ -43,7 +43,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               licenseNumber: '',
                               driverImage: '',
                               fromWhere: '',
-                              toWhere: '',
+                              toWhere: '', address: '',
                             ),
                   ),
                   const SizedBox(height: 30),
@@ -53,7 +53,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     title: 'المعلومات الشخصية',
                     trailing: Icon(Icons.arrow_forward_ios),
 
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pushNamed(context, personalInfoPage);
+                    },
                   ),
                   DividerCustomWidget(),
                   const SizedBox(height: 10),

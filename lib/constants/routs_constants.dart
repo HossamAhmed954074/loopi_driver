@@ -12,3 +12,4 @@ const String mapScreen = 'MapScreen';
 const String paymentsScreen = 'PaymentsScreen';
 const String paymentRequistBodyScreen = 'PaymentRequistBodyScreen';
 const String messageScreen = 'MessageScreen';
+const String personalInfoPage = 'PersonalInfoPage';
