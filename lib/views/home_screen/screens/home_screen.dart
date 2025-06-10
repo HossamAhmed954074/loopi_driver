@@ -50,6 +50,7 @@ class HomeScreen extends StatelessWidget {
                             driverImage: '',
                             fromWhere: '',
                             toWhere: '', address: '',
+                            seats: 0,
                           ),
                 ),
                 SizedBox(height: 20),

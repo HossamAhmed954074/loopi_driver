@@ -63,11 +63,6 @@ class CustomBottomNavBar extends StatelessWidget {
                 label: 'Home',
                 index: 0,
               ),
-              // _buildNavItem(
-              //   icon: Icons.confirmation_num_outlined,
-              //   label: '',
-              //   index: 1,
-              // ),
               _buildNavItem(
                 icon: Icons.person_outline,
                 label: 'Profile',

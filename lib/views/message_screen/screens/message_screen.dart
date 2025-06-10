@@ -16,7 +16,7 @@ class MessageScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TextEditingController controller = TextEditingController();
-    final _controller = ScrollController();
+    final controller0 = ScrollController();
     List<MessageModel> messageList =[];
     var auth =
         BlocProvider.of<LogInCubit>(context).getLoggedInUser().email;
@@ -49,7 +49,7 @@ class MessageScreen extends StatelessWidget {
                 if (state is ChatSuccess) {
                  return ListView.builder(
                     reverse: true,
-                    controller: _controller,
+                    controller: controller0,
                     physics: BouncingScrollPhysics(),
                     itemCount: messageList.length,
                     itemBuilder:
@@ -74,7 +74,7 @@ class MessageScreen extends StatelessWidget {
             BlocProvider.of<LogInCubit>(
               context,
             ).getLoggedInUser().email,
-        scrollController: _controller,
+        scrollController: controller0,
       ),
     );
   }

@@ -27,9 +27,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         body: SingleChildScrollView(
           physics: BouncingScrollPhysics(),
           child: BlocConsumer<HomeCubit, HomeState>(
-            listener: (context, state) {
-              // TODO: implement listener
-            },
+            listener: (context, state) {},
             builder: (context, state) {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,7 +42,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               licenseNumber: '',
                               driverImage: '',
                               fromWhere: '',
-                              toWhere: '', address: '',
+                              toWhere: '',
+                              address: '',
+                              seats: 0,
                             ),
                   ),
                   const SizedBox(height: 30),
@@ -107,9 +107,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     trailing: Icon(Icons.arrow_back_ios_new),
 
                     onTap: () async {
-                     await BlocProvider.of<LogInCubit>(context).logOut();
-                   
-                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => GetStartedScreen(),));
+                      await BlocProvider.of<LogInCubit>(context).logOut();
+                      if (context.mounted) {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => GetStartedScreen(),
+                          ),
+                        );
+                      }
                     },
                   ),
                 ],

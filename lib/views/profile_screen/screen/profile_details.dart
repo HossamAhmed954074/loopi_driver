@@ -64,6 +64,10 @@ class PersonalInfoPage extends StatelessWidget {
                   title: "Address",
                   value: state is HomeSuccess ? state.driverModel.address : '',
                 ),
+                 _InfoTile(
+                  title: "Seats",
+                  value: state is HomeSuccess ? state.driverModel.seats.toString() : '0',
+                ),
               ],
             ),
           ),

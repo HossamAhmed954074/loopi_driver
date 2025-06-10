@@ -24,7 +24,6 @@ class LoginScreen extends StatelessWidget {
           isLoading = true;
         } else if (state is LogInSuccess) {
           Navigator.pushReplacementNamed(context, homeScreen);
-          snackBarCustom(context, 'LogIn successfully');
           isLoading = false;
         } else if (state is LogInFaluire) {
           snackBarCustom(context, state.errorMessage);
