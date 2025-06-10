@@ -36,37 +36,39 @@ class MessageScreen extends StatelessWidget {
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: BlocConsumer<ChatCubit, ChatState>(
-              listener: (context, state) {
-                if(state is ChatSuccess){
-                 messageList =state.messageList;
-                }
-              },
-              builder: (context, state) {
-                if (state is ChatSuccess) {
-                 return ListView.builder(
-                    reverse: true,
-                    controller: controller0,
-                    physics: BouncingScrollPhysics(),
-                    itemCount: messageList.length,
-                    itemBuilder:
-                        (context, index) =>
-                            auth == messageList[index].id
-                                ? BubbleChatGet(masseage: messageList[index].message)
-                                : BubbleChatPost(
-                                  masseage: messageList[index].message,
-                                ),
-                  );
-                }
-                return Center(child: Text('Not have message'));
-              },
+      body: SafeArea(
+        child: Column(
+          children: [
+            Expanded(
+              child: BlocConsumer<ChatCubit, ChatState>(
+                listener: (context, state) {
+                  if(state is ChatSuccess){
+                   messageList =state.messageList;
+                  }
+                },
+                builder: (context, state) {
+                  if (state is ChatSuccess) {
+                   return ListView.builder(
+                      reverse: true,
+                      controller: controller0,
+                      physics: BouncingScrollPhysics(),
+                      itemCount: messageList.length,
+                      itemBuilder:
+                          (context, index) =>
+                              auth == messageList[index].id
+                                  ? BubbleChatGet(masseage: messageList[index].message)
+                                  : BubbleChatPost(
+                                    masseage: messageList[index].message,
+                                  ),
+                    );
+                  }
+                  return Center(child: Text('Not have message'));
+                },
+              ),
             ),
-          ),
-          SizedBox(height: 100,)
-        ],
+            SizedBox(height: 100,)
+          ],
+        ),
       ),
       bottomSheet: SendMasseageTextFaildCustomWidget(
         controller: controller,

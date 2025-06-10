@@ -34,9 +34,9 @@ class HomeScreen extends StatelessWidget {
            }
       },
       builder: (context, state) {
-        return SafeArea(
-          child: Scaffold(
-            body: Column(
+        return Scaffold(
+          body: SafeArea(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 AppBarCustomWidget(

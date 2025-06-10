@@ -22,9 +22,9 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: SingleChildScrollView(
+    return Scaffold(
+      body: SafeArea(
+        child: SingleChildScrollView(
           physics: BouncingScrollPhysics(),
           child: BlocConsumer<HomeCubit, HomeState>(
             listener: (context, state) {},
@@ -53,7 +53,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     leadingIcon: FontAwesomeIcons.person,
                     title: 'المعلومات الشخصية',
                     trailing: Icon(Icons.arrow_forward_ios),
-
+            
                     onTap: () {
                       Navigator.pushNamed(context, personalInfoPage);
                     },
@@ -69,11 +69,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         BlocProvider.of<AppThemeCubit>(
                           context,
                         ).changeTheme(val);
-
+            
                         setState(() {});
                       },
                     ),
-
+            
                     onTap: () {},
                   ),
                   const SizedBox(height: 10),
@@ -83,7 +83,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     leadingIcon: Icons.settings,
                     title: 'ألاعدادات',
                     trailing: Icon(Icons.arrow_forward_ios),
-
+            
                     onTap: () {},
                   ),
                   const SizedBox(height: 10),
@@ -93,7 +93,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     leadingIcon: Icons.chat,
                     title: 'الدردشة',
                     trailing: Icon(Icons.arrow_forward_ios),
-
+            
                     onTap: () {
                       Navigator.pushNamed(context, messageScreen);
                     },
@@ -105,7 +105,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     leadingIcon: FontAwesomeIcons.backward,
                     title: 'تسجيل الخروج',
                     trailing: Icon(Icons.arrow_back_ios_new),
-
+            
                     onTap: () async {
                       await BlocProvider.of<LogInCubit>(context).logOut();
                       if (context.mounted) {
