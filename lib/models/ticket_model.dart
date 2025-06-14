@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TicketModel {
   final String fromWhere;
@@ -16,15 +17,38 @@ class TicketModel {
     required this.allPrice,
   });
 
-
-  factory TicketModel.fromJson(json){
+  factory TicketModel.fromJson(json) {
     return TicketModel(
-      fromWhere: json['fromWhere'], 
-      toWhere: json['toWhere'], 
-      fromTime: json['fromTime'], 
-      toTime: json['toTime'], 
-      personCount: json['personCount'], 
-      allPrice: double.parse(json['personPrice']) * double.parse(json['personCount']),
-      );
+      fromWhere: json['client_from_city'],
+      toWhere: json['client_to_city'],
+      fromTime: json['fromTime'],
+      toTime: json['toTime'],
+      personCount: json['personCount'],
+      allPrice:
+          double.parse(json['personPrice']) * double.parse(json['personCount']),
+    );
+  }
+}
+
+class TicketsInfo {
+  final int ticketsCount;
+  final String fromWere;
+  final String toWere;
+  final double allPrice;
+
+
+  TicketsInfo({
+    required this.ticketsCount,
+    required this.fromWere,
+    required this.toWere,
+    required this.allPrice,
+  });
+  factory TicketsInfo.fromJson(json, int count, double allPrice) {
+    return TicketsInfo(
+      ticketsCount: count,
+      fromWere: json['client_from_city'],
+      toWere: json['client_to_city'],
+      allPrice: allPrice,
+    );
   }
 }

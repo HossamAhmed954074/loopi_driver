@@ -1,4 +1,5 @@
 
+
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:loopi_driver/models/driver_model.dart';
@@ -9,7 +10,10 @@ part 'home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {
   HomeCubit() : super(HomeInitial());
+
+
    getDate({required String auth})async {
+    emit(HomeLoading());
      DocumentSnapshot data = await FirebaseFirestore.instance
       .collection('drivers')
       .doc(auth).get();
@@ -17,19 +21,21 @@ class HomeCubit extends Cubit<HomeState> {
      
   }
 
-
-   getTicketsDate({required String auth}) {
-     final CollectionReference messages = FirebaseFirestore.instance
+  getTicketsInfo({required String auth}) {
+     final CollectionReference messages =  FirebaseFirestore.instance
       .collection('drivers')
       .doc(auth)
       .collection('tickets');
      
       messages.snapshots().listen((event) {
-       List<TicketModel> list=[];
-       for(var doc in event.docs){
-          list.add(TicketModel.fromJson(doc));
+        TicketsInfo ticketsInfo;
+       double allPrice=0;    
+       for(var doc in event.docs){       
+          allPrice+= doc['price'];
        }
-        emit(TicketSuccess(ticketModel: list));
+       ticketsInfo = TicketsInfo.fromJson(event.docs[0], event.docs.length, allPrice);
+       emit(TicketInfoSuccess(ticketInfo: ticketsInfo));
+
       },);
   }
 }

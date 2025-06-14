@@ -6,3 +6,4 @@ const String homeScreen = 'HomeScreen';
 const String profileScreen = 'ProfileScreen';
 const String messageScreen = 'MessageScreen';
 const String personalInfoPage = 'PersonalInfoPage';
+const String allUserInfoTickets = 'AllUserTiketsScreen';

@@ -4,6 +4,7 @@ part of 'home_cubit.dart';
 sealed class HomeState {}
 
 final class HomeInitial extends HomeState {}
+final class HomeLoading extends HomeState {}
 final class HomeSuccess extends HomeState {
   final DriverModel driverModel;
 
@@ -15,3 +16,12 @@ final class TicketSuccess extends HomeState {
 
   TicketSuccess({required this.ticketModel});
 }
+
+final class TicketInfoSuccess extends HomeState {
+  final TicketsInfo  ticketInfo;
+  TicketInfoSuccess({required this.ticketInfo});
+}
+
+
+
+

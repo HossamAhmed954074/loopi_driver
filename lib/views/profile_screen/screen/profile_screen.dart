@@ -12,6 +12,8 @@ import 'package:loopi_driver/views/profile_screen/widgets/divider_custom_widget.
 import 'package:loopi_driver/views/profile_screen/widgets/list_item_custom_button.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../../home_screen/widgets/app_bar_custom_widget.dart';
+
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
