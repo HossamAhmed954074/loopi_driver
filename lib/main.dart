@@ -7,6 +7,7 @@ import 'package:loopi_driver/cubits/chat_cubit/cubit/chat_cubit.dart';
 import 'package:loopi_driver/cubits/home_cubit/cubit/home_cubit.dart';
 import 'package:loopi_driver/cubits/login_cubit/cubit/log_in_cubit.dart';
 import 'package:loopi_driver/firebase_options.dart';
+import 'package:loopi_driver/views/all_users_tickets/cubit/all_users_tickets_cubit.dart';
 import 'package:loopi_driver/views/all_users_tickets/screens/all_user_tikets.dart';
 import 'package:loopi_driver/views/get_started_screen/screens/get_started_screen.dart';
 import 'package:loopi_driver/views/home_screen/screens/bottom_navigation.dart';
@@ -33,6 +34,9 @@ class LoopiDriver extends StatelessWidget {
         BlocProvider(create: (context) => ChatCubit(),),
         BlocProvider(create: (context) => HomeCubit(),),
         BlocProvider(create: (context) => LogInCubit(),),
+        BlocProvider(
+          create: (context) => AllUsersTicketsCubit(),
+        ),
         ],
       child: BlocBuilder<AppThemeCubit, AppThemeState>(
         builder: (context, state) {

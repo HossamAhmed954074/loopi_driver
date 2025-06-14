@@ -27,7 +27,7 @@ class _BottomNavigationBarCustomWidgetState extends State<BottomNavigationBarCus
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: list.elementAt(_currentIndex),
+      body: SafeArea(child: list.elementAt(_currentIndex)),
       bottomNavigationBar: CustomBottomNavBar(
         selectedIndex: _currentIndex,
         onItemTapped: _onTabTapped,

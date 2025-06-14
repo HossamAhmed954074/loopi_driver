@@ -15,4 +15,4 @@ final class AllUsersTicketsFailure extends AllUsersTicketsState {
 
   AllUsersTicketsFailure({required this.error});
 }
-
+final class AllUsersTicketsUpdateSuccess extends AllUsersTicketsState {}

@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -21,16 +20,81 @@ class AllUsersTicketsCubit extends Cubit<AllUsersTicketsState> {
           .collection('tickets')
           .get()
           .then((value) {
-            log('Fetched ${value.docs.length} tickets for driver: $auth');
             for (var element in value.docs) {
-              log('Ticket ID: ${element.id}, Data: ${element.data()}');
-              userTickets.add(UserTicketModel.fromJson(element.data()));
-              
+             
+              userTickets.add(UserTicketModel.fromJson(element.data(), element.id));
+               emit(AllUsersTicketsSuccess(userTickets: userTickets));
             }
           });
-      emit(AllUsersTicketsSuccess(userTickets: userTickets));
+     
     } catch (e) {
       emit(AllUsersTicketsFailure(error: e.toString()));
+    }
+  }
+
+
+
+  updateUserTicketIsPackup({
+    required String auth,
+    required String ticketId,
+    required String userId,
+    required String userTickedId,
+
+  }) async {
+    emit(AllUsersTicketsLoading());
+    try {
+      await FirebaseFirestore.instance
+          .collection('drivers')
+          .doc(auth)
+          .collection('tickets')
+          .doc(ticketId)
+          .update({'isPackUp': true});
+
+          await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .collection('tikets')
+          .doc(userTickedId)
+          .update({'isPackUp': true});
+
+      emit(AllUsersTicketsUpdateSuccess());
+    } catch (e) {
+      emit(AllUsersTicketsFailure(error: e.toString()));
+    }finally {
+      // Optionally, you can call getAllUsersTickets again to refresh the list
+      getAllUsersTickets(auth: auth);
+    }
+  }
+
+
+
+  updateUserTicketIsDelivered({
+    required String auth,
+    required String ticketId,
+    required String userId,
+    required String userTickedId,
+  }) async {
+    emit(AllUsersTicketsLoading());
+    try {
+      await FirebaseFirestore.instance
+          .collection('drivers')
+          .doc(auth)
+          .collection('tickets')
+          .doc(ticketId)
+          .update({'isArrived': true});
+
+          await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .collection('tikets')
+          .doc(userTickedId)
+          .update({'isArrived': true});
+      emit(AllUsersTicketsUpdateSuccess());
+    } catch (e) {
+      emit(AllUsersTicketsFailure(error: e.toString()));
+    }finally {
+      // Optionally, you can call getAllUsersTickets again to refresh the list
+      getAllUsersTickets(auth: auth);
     }
   }
 }

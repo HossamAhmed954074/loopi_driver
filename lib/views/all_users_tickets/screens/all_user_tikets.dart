@@ -21,12 +21,8 @@ class AllUserTiketsScreen extends StatelessWidget {
         title: Text('All User Tickets'),
         centerTitle: true,
         backgroundColor: Colors.blue,
-
       ),
-      body: BlocProvider(
-        create: (context) => AllUsersTicketsCubit(),
-        child: AllUserTiketsbody(),
-      ),
+      body: AllUserTiketsbody(),
     );
   }
 }
@@ -41,33 +37,28 @@ class AllUserTiketsbody extends StatefulWidget {
 class _AllUserTiketsbodyState extends State<AllUserTiketsbody> {
   List<UserTicketModel> userTickets = [];
 
- @override
+  @override
   void initState() {
     super.initState();
     // Fetch tickets when the widget is initialized
-    BlocProvider.of<AllUsersTicketsCubit>(context).getAllUsersTickets(auth: 'driver2@gmail.com');
+    BlocProvider.of<AllUsersTicketsCubit>(
+      context,
+    ).getAllUsersTickets(auth: 'driver2@gmail.com');
   }
-
 
   @override
   Widget build(BuildContext context) {
-  
-    return BlocConsumer<AllUsersTicketsCubit, AllUsersTicketsState>(
-      listener: (context, state) {
+    return BlocBuilder<AllUsersTicketsCubit, AllUsersTicketsState>(
+      builder: (context, state) {
+        if (state is AllUsersTicketsLoading) {
+          return c();
+        }
+        if (state is AllUsersTicketsFailure) {
+          return Center(child: Text('Error: ${state.error}'));
+        }
         if (state is AllUsersTicketsSuccess) {
           userTickets = state.userTickets;
         }
-        if (state is AllUsersTicketsFailure) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text('Error: ${state.error}')));
-        }
-        if (state is AllUsersTicketsLoading) {
-          Center(child: CircularProgressIndicator());
-        }
-      },
-      builder: (context, state) {
-       
         return ListView.builder(
           itemCount: userTickets.length,
           itemBuilder: (context, index) {
@@ -77,63 +68,166 @@ class _AllUserTiketsbodyState extends State<AllUserTiketsbody> {
       },
     );
   }
+
+  c() {
+    return Center(child: CircularProgressIndicator());
+  }
 }
 
-class TicketInfoCard extends StatelessWidget {
+class TicketInfoCard extends StatefulWidget {
   const TicketInfoCard({super.key, required this.userTicketModel});
 
   final UserTicketModel userTicketModel;
 
   @override
+  State<TicketInfoCard> createState() => _TicketInfoCardState();
+}
+
+class _TicketInfoCardState extends State<TicketInfoCard> {
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 100,
-      padding: const EdgeInsets.all(4),
-      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      decoration: BoxDecoration(
-        color: userTicketModel.isPackUp ? Colors.green.shade100 : Colors.red.shade100,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
+    return InkWell(
+      onTap: () {
+        // Handle tap if needed
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text('Ticket Details'),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                   Text(
-                    'اسم المستخدم : ',
-                    style: TextStyle(color: Colors.black.withAlpha(150)),
+                  Text('User Name: ${widget.userTicketModel.userName}'),
+                  Text('From Station: ${widget.userTicketModel.fromStation}'),
+                  Text('To Station: ${widget.userTicketModel.toStation}'),
+                  Text(
+                    'Price: ${widget.userTicketModel.price.toStringAsFixed(2)} جنيه',
                   ),
-                  Text(userTicketModel.userName),
+                  Text(
+                    'Is Pack Up: ${widget.userTicketModel.isPackUp ? "Yes" : "No"}',
+                  ),
                 ],
               ),
-              Row(
-                children: [
-                   Text('من : ', style: TextStyle(color: Colors.black.withAlpha(150))),
-                  Text(userTicketModel.fromStation),
-                ],
-              ),
-              Row(
-                children: [
-                   Text('الي : ', style: TextStyle(color: Colors.black.withAlpha(150))),
-                  Text(userTicketModel.toStation),
-                ],
-              ),
-            ],
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-               Text(
-                'سعر التذكرة : ',
-                style: TextStyle(color: Colors.black.withAlpha(150)),
-              ),
-              Text('${userTicketModel.price.toStringAsFixed(2)} جنيه'),
-            ],
-          ),
-        ],
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Close'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    BlocProvider.of<AllUsersTicketsCubit>(
+                      context,
+                    ).updateUserTicketIsPackup(
+                      auth: FirebaseAuth.instance.currentUser!.email!,
+                      ticketId: widget.userTicketModel.driverTicketId,
+                      userId: widget.userTicketModel.userName,
+                      userTickedId: widget.userTicketModel.ticketId,
+                    );
+
+                    Navigator.of(context).pop();
+                    setState(() {});
+                  },
+                  child: Text('pack up'),
+                ),
+                if (widget.userTicketModel.isPackUp)
+                TextButton(
+                  onPressed: () {
+                      BlocProvider.of<AllUsersTicketsCubit>(
+                      context,
+                    ).updateUserTicketIsDelivered(
+                      auth: FirebaseAuth.instance.currentUser!.email!,
+                      ticketId: widget.userTicketModel.driverTicketId,
+                      userId: widget.userTicketModel.userName,
+                      userTickedId: widget.userTicketModel.ticketId,
+                    );
+                    Navigator.of(context).pop();
+                    setState(() {});
+                  },
+                  child: Text('Arrived'),
+                ),
+              ],
+            );
+          },
+        );
+      },
+      child: Container(
+        height: 100,
+        padding: const EdgeInsets.all(4),
+        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        decoration: BoxDecoration(
+          color:
+              widget.userTicketModel.isPackUp
+                  ? Colors.green.shade100
+                  : Colors.red.shade100,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Text(
+                      'اسم المستخدم : ',
+                      style: TextStyle(color: Colors.black.withAlpha(150)),
+                    ),
+                    Text(widget.userTicketModel.userName),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Text(
+                      'من : ',
+                      style: TextStyle(color: Colors.black.withAlpha(150)),
+                    ),
+                    Text(widget.userTicketModel.fromStation),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Text(
+                      'الي : ',
+                      style: TextStyle(color: Colors.black.withAlpha(150)),
+                    ),
+                    Text(widget.userTicketModel.toStation),
+                  ],
+                ),
+              ],
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'سعر التذكرة : ',
+                  style: TextStyle(color: Colors.black.withAlpha(150)),
+                ),
+                Text('${widget.userTicketModel.price.toStringAsFixed(2)} جنيه'),
+                SizedBox(height: 8),
+                if (widget.userTicketModel.isDelivered)
+                  Text(
+                    'تم الوصل',
+                    style: TextStyle(
+                      color: Colors.green,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  )
+                else
+                  Text(
+                    'لم يتم الوصل',
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

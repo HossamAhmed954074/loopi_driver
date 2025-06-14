@@ -7,7 +7,6 @@ import 'package:loopi_driver/cubits/home_cubit/cubit/home_cubit.dart';
 import 'package:loopi_driver/cubits/login_cubit/cubit/log_in_cubit.dart';
 import 'package:loopi_driver/models/driver_model.dart';
 import 'package:loopi_driver/views/get_started_screen/screens/get_started_screen.dart';
-import 'package:loopi_driver/views/home_screen/screens/home_screen.dart';
 import 'package:loopi_driver/views/profile_screen/widgets/divider_custom_widget.dart';
 import 'package:loopi_driver/views/profile_screen/widgets/list_item_custom_button.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -24,9 +23,8 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
+    return 
+        SingleChildScrollView(
           physics: BouncingScrollPhysics(),
           child: BlocConsumer<HomeCubit, HomeState>(
             listener: (context, state) {},
@@ -124,8 +122,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               );
             },
           ),
-        ),
-      ),
+       
     );
   }
 }

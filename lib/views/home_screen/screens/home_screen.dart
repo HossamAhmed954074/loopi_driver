@@ -9,46 +9,36 @@ import '../widgets/sub_header_text.dart';
 import '../widgets/ticket_info_card.dart';
 
 class HomeScreen extends StatelessWidget {
- const  HomeScreen({super.key});
-
-  
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-     BlocProvider.of<HomeCubit>(context).getDate(
+    BlocProvider.of<HomeCubit>(context).getDate(
       auth: BlocProvider.of<LogInCubit>(context).getLoggedInUser().email!,
     );
     return BlocConsumer<HomeCubit, HomeState>(
-     
-      listener: (context, state) {
- 
-        
-      },
+      listener: (context, state) {},
       builder: (context, state) {
-        return Scaffold(
-          body: SafeArea(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-               if (state is HomeLoading) 
-                  Center(child: CircularProgressIndicator(),),
-                if (state is HomeSuccess)
-                AppBarCustomWidget(
-                  driverModell: state.driverModel,
-                ),
-                SizedBox(height: 20),
-                SubComponentCustomWidget(),
-                SizedBox(height: 10),
-                TicketInfoCard(onTap: () {
+        return SafeArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (state is HomeLoading)
+                Center(child: CircularProgressIndicator()),
+              if (state is HomeSuccess)
+                AppBarCustomWidget(driverModell: state.driverModel),
+              SizedBox(height: 20),
+              SubComponentCustomWidget(),
+              SizedBox(height: 10),
+              TicketInfoCard(
+                onTap: () {
                   Navigator.pushReplacementNamed(context, allUserInfoTickets);
-                },),
-              ],
-            ),
+                },
+              ),
+            ],
           ),
         );
       },
     );
   }
 }
-
-
